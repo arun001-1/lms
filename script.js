@@ -24,7 +24,6 @@ function getRandomMeasures() {
 
 checkForm.addEventListener('submit', async function(event) {
     event.preventDefault();
-    
 
     const urlInput = document.getElementById('urlInput').value.trim();
     if (!urlInput) {
@@ -34,9 +33,9 @@ checkForm.addEventListener('submit', async function(event) {
 
     urlLoader.style.display = 'block';
     resultDiv.innerHTML = '';
-    
+
     const apiUrl = `http://localhost:3000/check-url?url=${encodeURIComponent(urlInput)}`;
-    
+
     try {
         const response = await fetch(apiUrl);
         if (!response.ok) {
@@ -48,7 +47,6 @@ checkForm.addEventListener('submit', async function(event) {
         console.error('Error fetching data:', error);
         resultDiv.innerHTML = `<p>Failed to fetch data: ${error.message}. Please try again later.</p>`;
     } finally {
-        resultDiv.classList.add("result-style");
         urlLoader.style.display = 'none';
     }
 });
@@ -67,28 +65,63 @@ fileForm.addEventListener('submit', async function(event) {
 
     const formData = new FormData();
     formData.append('file', fileInput);
-
+    console.log("hai")
     try {
         const response = await fetch('http://localhost:3000/check-file', {
             method: 'POST',
             body: formData
         });
-
+        console.log("hai")
+        console.log(response)
         if (!response.ok) {
             const errorText = await response.text();
             throw new Error(`Network response was not ok: ${errorText}`);
         }
-
-        const data = await response.json();
-        displayResult(data);
+        const Res = await response.json();
+       // const stats = Res.data.attributes.stats;
+       const stats = Res;
+       // console.log(fileId)
+        console.log(stats)
+console.log("hai")
+       // const data = JSON.parse (response) ;
+        displayFileResult(stats);
     } catch (error) {
         console.error('Error fetching data:', error);
         resultDiv.innerHTML = `<p>Failed to fetch data: ${error.message}. Please try again later.</p>`;
     } finally {
-        fileLoader.classList.add("result-style");
         fileLoader.style.display = 'none';
     }
 });
+
+function displayFileResult(data) {
+    resultDiv.innerHTML = ''; 
+
+    let resultHTML = '<h2>File Scan Results:</h2>';
+    resultHTML += '<ul>';
+    if (data.malicious > 0) {
+        resultHTML += '<li><strong>Malicious:</strong> Yes</li>';
+        resultHTML += '<li><strong>Precautionary Measures:</strong></li>';
+        const measures = getRandomMeasures();
+        resultHTML += '<ul>';
+        measures.forEach(measure => {
+            resultHTML += `<li>${measure}</li>`;
+        });
+        resultHTML += '</ul>';
+    } else {
+        resultHTML += '<li><strong>Malicious:</strong> No</li>';
+    }
+    resultHTML += '<li><strong>Suspicious:</strong> ' + data.suspicious + '</li>';
+    resultHTML += '<li><strong>Undetected:</strong> ' + data.undetected + '</li>';
+    resultHTML += '<li><strong>Harmless:</strong> ' + data.harmless + '</li>';
+    resultHTML += '<li><strong>Timeout:</strong> ' + data.timeout + '</li>';
+    resultHTML += '<li><strong>Confirmed Timeout:</strong> ' + data['confirmed-timeout'] + '</li>';
+    resultHTML += '<li><strong>Failure:</strong> ' + data.failure + '</li>';
+    resultHTML += '<li><strong>Type Unsupported:</strong> ' + data['type-unsupported'] + '</li>';
+    resultHTML += '</ul>';
+
+    resultDiv.innerHTML = resultHTML;
+}
+
 
 function displayResult(data) {
     resultDiv.innerHTML = ''; 
