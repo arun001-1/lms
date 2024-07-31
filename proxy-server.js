@@ -119,7 +119,7 @@ console.log(fileId)
         
         // console.log(typeof data)
 
-        res.send(fileInfoResponse);
+        res.send(stats);
         // console.log(fileId)
         // Clean up the uploaded file
         fs.unlink(filePath, (err) => {
