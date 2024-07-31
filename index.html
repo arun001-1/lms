@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Malicious Checker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>MALICIOUS ANALYZER</h1>
+        <p class="para-style">To analyse suspicious files, domains, IPs and URLs to detect malware</p>
+        <form id="checkForm">
+            <label for="urlInput">Enter URL:</label>
+            <input type="text" id="urlInput" name="urlInput" placeholder="URL, IP address, domain" required>
+            <button type="submit">Check URL</button>
+            <!-- <div id="urlLoader" class="loader"></div> -->
+        </form>
+        
+        <form id="fileForm">
+            <label for="fileInput">Upload File:</label>
+            <input type="file" id="fileInput" name="fileInput" required>
+            <button type="submit">Check File</button>
+            
+        </form>
+        
+        <div id="result" class="">
+            
+        </div>
+        <div class="loader-container">
+            <div id="urlLoader" class="loader"></div>
+            <div id="fileLoader" class="loader"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
